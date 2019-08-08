@@ -1,4 +1,4 @@
-const data = [
+/* const data = [
     { name: 'news', parent: '' },
     { name: 'tech', parent: 'news' },
     { name: 'sport', parent: 'news' },
@@ -131,30 +131,28 @@ const data2 = [
       "parent": "10",
       "amount": 6
   }
-];
+]; */
 
-const svg = d3.select('.canvas')
-  .append('svg')
-  .attr('width', 1060)
-  .attr('height', 800);
+const modal = document.querySelector('.modal');
+M.Modal.init(modal);
 
-const graph = svg.append('g')
-  .attr('transform', 'translate(50, 50)'); // to give a 50px margin
+const form = document.querySelector('form');
+const name = document.querySelector('#name');
+const parent = document.querySelector('#parent');
+const department = document.querySelector('#department');
 
-const stratify = d3.stratify()
-  .id(d => d.name)
-  .parentId(d => d.parent);
+form.addEventListener('submit', e => {
+  e.preventDefault();
 
-const rootNode = stratify(data2)
-  .sum(d => d.amount);
+  db.collection('employees').add({
+    name: name.value, 
+    parent: parent.value, 
+    department: department.value
+  });
 
-const pack = d3.pack()
-  .size([960, 700])
-  .padding(5);
+  var instance = M.Modal.getInstance(modal);
+  instance.close();
 
-// console.log(pack(rootNode));
-console.log(pack(rootNode).descendants());
+  form.reset();
 
-const bubbleData = pack(rootNode).descendants();
-
-
+});
